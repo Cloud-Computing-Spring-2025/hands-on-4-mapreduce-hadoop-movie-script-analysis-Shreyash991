@@ -44,6 +44,6 @@ public class MovieScriptAnalysis {
         job3.setOutputValueClass(Text.class);
         FileInputFormat.addInputPath(job3, new Path(args[1]));
         FileOutputFormat.setOutputPath(job3, new Path(args[2] + "/task3"));
-        System.exit(job3.waitForCompletion(true) ? 0 : 1);
+        System.exit(job3.waitForCompletion(true) ? 0 : 1); 
     }
 }

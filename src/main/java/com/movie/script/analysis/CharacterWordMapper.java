@@ -15,6 +15,23 @@ public class CharacterWordMapper extends Mapper<Object, Text, Text, IntWritable>
 
     @Override
     public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+         String line=value.toString();
+         if(line.contains(":")){
+            String[] part=line.split(":",2);
+            String dialogue=part[1].trim().toLowerCase();
+
+            String[] words=dialogue.split("\\s+");
+            for(String word:words){
+                word=word.replaceAll("[^a-zA-Z]","");
+                if(!word.isEmpty()){
+                    context.write(new Text(word), new IntWritable(1));
+                    context.getCounter("Movie Metrics", "Total Words Processed").increment(1);
+                    context.getCounter("Movie Metrics", "Total Characters Processed").increment(word.length());
+                    }
+                }
+                    context.getCounter("Movie Metrics", "Total Lines Processed").increment(1);
+                 }
+
 
     }
 }

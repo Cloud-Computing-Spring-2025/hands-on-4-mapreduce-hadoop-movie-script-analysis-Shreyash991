@@ -14,6 +14,20 @@ public class UniqueWordsMapper extends Mapper<Object, Text, Text, Text> {
 
     @Override
     public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
-
-    }
+                String line = value.toString();
+                if (line.contains(":")) {
+                    String[] parts = line.split(":", 2);
+                    String chars = parts[0].trim();
+                    String dialogue = parts[1].trim().toLowerCase();
+                    
+                    String[] words = dialogue.split("\\s+");
+                    for (String word : words) {
+                        word = word.replaceAll("[^a-zA-Z]", "");
+                        if (!word.isEmpty()) {
+                            context.write(new Text(chars), new Text(word));
+                            context.getCounter("Movie Metrics", "Total Unique Words Identified").increment(1);
+                        }
+                    }
+                }
+}
 }
